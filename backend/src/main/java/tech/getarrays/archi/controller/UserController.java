@@ -1,4 +1,4 @@
-package tech.getarrays.archi;
+package tech.getarrays.archi.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +8,7 @@ import tech.getarrays.archi.model.User;
 import tech.getarrays.archi.service.UserService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -22,6 +23,18 @@ public class UserController {
   public ResponseEntity<List<User>> getAllEmployees() {
     List<User> users = userService.findaAllUsers();
     return new ResponseEntity<>(users, HttpStatus.OK);
+  }
+
+  @PostMapping("/login")
+  public ResponseEntity<User> loginUser(@RequestBody Map<String, String> loginData) {
+      String email = loginData.get("email");
+      String password = loginData.get("password");
+      try {
+          User user = userService.loginUser(email, password);
+          return new ResponseEntity<>(user, HttpStatus.OK);
+      } catch (UserNotFoundException | IllegalArgumentException e) {
+          return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+      }
   }
 
   @GetMapping("/find/{id}")

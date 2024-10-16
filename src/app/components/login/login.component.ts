@@ -20,7 +20,7 @@ import { MessageService } from 'primeng/api';
     RouterLink,
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   login = {
@@ -31,28 +31,30 @@ export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
   private messageService = inject(MessageService);
+
   onLogin() {
     const { email, password } = this.login;
-    this.authService.getUserDetails(email, password).subscribe({
+
+    this.authService.loginUser(email, password).subscribe({
       next: (response) => {
-        if (response.length >= 1) {
-          sessionStorage.setItem('email', email);
+        if (response) {
+          sessionStorage.setItem('email', response.email);
           this.router.navigate(['home']);
         } else {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Something went wrong',
-          });
+          this.showError('Invalid login credentials');
         }
       },
       error: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Something went wrong',
-        });
+        this.showError('Unable to login. Please try again.');
       },
+    });
+  }
+
+  private showError(message: string) {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Login Error',
+      detail: message,
     });
   }
 }

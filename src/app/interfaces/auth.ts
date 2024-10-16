@@ -1,5 +1,5 @@
 export interface RegisterPostData {
-  fullName: string;
+  name: string;
   email: string;
   password: string;
 }

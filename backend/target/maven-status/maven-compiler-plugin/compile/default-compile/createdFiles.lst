@@ -1,0 +1,4 @@
+tech\getarrays\archi\model\User.class
+tech\getarrays\archi\repo\UserRepo.class
+tech\getarrays\archi\service\UserService.class
+tech\getarrays\archi\ArchiApplication.class
